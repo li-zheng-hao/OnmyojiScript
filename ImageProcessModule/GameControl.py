@@ -285,7 +285,7 @@ class GameControl:
             :param quit=True: 超时后是否退出
             :return: 成功返回坐标，失败返回False
         """
-        self.rejectbounty()
+        self.reject_bounty()
         start_time = time.time()
         while time.time() - start_time <= max_time and self.run:
             maxVal, maxLoc = self.find_img(img_path)
@@ -311,7 +311,7 @@ class GameControl:
             :param quit=True: 超时后是否退出
             :return: 成功返回True，失败返回False
         """
-        self.rejectbounty()
+        self.reject_bounty()
         start_time = time.time()
         while time.time() - start_time <= max_time and self.run:
             pos = self.find_color(region, color)
@@ -328,21 +328,22 @@ class GameControl:
         """
         退出游戏
         """
-        self.takescreenshot()  # 保存一下现场
+        self.take_screenshot()  # 保存一下现场
         if not self.run:
             return False
         if self.quit_game_enable:
             win32gui.SendMessage(self.hwnd, win32con.WM_DESTROY, 0, 0)  # 退出游戏
         sys.exit(0)
 
-    def takescreenshot(self):
-        '''
+    def take_screenshot(self):
+        """
         截图
-        '''
-        img_src_path = 'img\\full.png'
+        :return:
+        """
+        img_src_path = ImgPath.IMG_FILE_PATH+'full.png'
         self.window_full_shot(img_src_path)
 
-    def rejectbounty(self):
+    def reject_bounty(self):
         '''
         拒绝悬赏
             :return: 拒绝成功返回True，其他情况返回False
@@ -363,7 +364,7 @@ class GameControl:
             :param gray=0: 是否查找黑白图片，0：查找彩色图片，1：查找黑白图片
             :return: 查找成功返回位置坐标，否则返回False
         '''
-        self.rejectbounty()
+        self.reject_bounty()
         maxVal, maxLoc = self.find_img(img_path, part, pos1, pos2, gray)
         if maxVal > 0.97:
             return maxLoc
