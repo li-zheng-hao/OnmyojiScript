@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(807, 626)
+        MainWindow.resize(817, 627)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -57,7 +57,7 @@ class Ui_MainWindow(object):
         self.groupBox.setGeometry(QtCore.QRect(0, 130, 241, 471))
         self.groupBox.setObjectName("groupBox")
         self.textBrowser = QtWidgets.QTextBrowser(self.groupBox)
-        self.textBrowser.setGeometry(QtCore.QRect(5, 21, 231, 451))
+        self.textBrowser.setGeometry(QtCore.QRect(5, 21, 231, 441))
         self.textBrowser.setObjectName("textBrowser")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)

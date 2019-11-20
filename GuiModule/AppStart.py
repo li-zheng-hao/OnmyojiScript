@@ -1,10 +1,14 @@
 import ctypes
+import logging
 import sys
 
 from PyQt5.QtWidgets import QMainWindow, QApplication
 
-from MainWindow import Ui_MainWindow
+from CommonUtil.Logger import QTextEditLogger
+
 sys.path.append('..')
+
+from GuiModule.MainWindow import Ui_MainWindow
 from CommonUtil.IsAdmin import is_admin
 
 
@@ -13,6 +17,9 @@ class AppStart(QMainWindow):
         super(AppStart, self).__init__(parent)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        logger = QTextEditLogger(self, logger_ui=self.ui.textBrowser)
+        logging.getLogger().addHandler(logger)
+        logging.getLogger().setLevel(logging.DEBUG)
 
 
 if __name__ == "__main__":
