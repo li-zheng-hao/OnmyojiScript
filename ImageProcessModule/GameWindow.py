@@ -24,7 +24,7 @@ class GameWindow:
         :return:
         """
         windows = {}
-        win32gui.EnumWindows(GameWindow.__MyCallback, windows)
+        win32gui.EnumWindows(GameWindow.__my_call_back, windows)
         yys_hwnd = []
         for key, window in windows.items():
             if window[2] == u'阴阳师-网易游戏':

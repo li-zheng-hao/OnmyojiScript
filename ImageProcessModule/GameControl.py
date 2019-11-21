@@ -10,27 +10,26 @@ import win32gui
 import win32ui
 from PIL import Image
 
-from CommonUtil import ImgPath
+from CommonUtil import ImgPath, CommonPosition
+from YuHunModule.State  import State
 
 
 class GameControl:
-    def __init__(self, hwnd, quit_game_enable=False):
+    def __init__(self, hwnd, run: State, quit_game_enable=False):
         """
         初始化
+            :param run: 运行状态
             :param hwnd: 需要绑定的窗口句柄
             :param quit_game_enable: 程序死掉时是否退出游戏。True为是，False为否
         """
-        self.run = True
+        self.run = run
         self.hwnd = hwnd
         self.quit_game_enable = quit_game_enable
-        # user32 = ctypes.windll.user32
-        # user32.SetProcessDPIAware()
 
-    def window_full_shot(self, file_name=None, gray=0):
+    def window_full_shot(self, file_name=None):
         """
         窗口截图
             :param file_name=None: 截图文件的保存名称
-            :param gray=0: 是否返回灰度图像，0：返回BGR彩色图像，其他：返回灰度黑白图像
             :return: file_name为空则返回RGB数据
         """
         try:
@@ -62,14 +61,11 @@ class GameControl:
                 win32gui.DeleteObject(bmp.GetHandle())
                 # cv2.imshow("image", cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY))
                 # cv2.waitKey(0)
-                if gray == 0:
-                    return cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
-                else:
-                    return cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
+                return cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
         except:
             pass
 
-    def window_part_shot(self, pos1, pos2, file_name=None, gray=0):
+    def window_part_shot(self, pos1, pos2, file_name=None):
         """
         窗口区域截图
             :param pos1: (x,y) 截图区域的左上角坐标
@@ -105,34 +101,26 @@ class GameControl:
             win32gui.DeleteObject(bmp.GetHandle())
             # cv2.imshow("image", cv2.cvtColor(img, cv2.COLOR_BGRA2BGR))
             # cv2.waitKey(0)
-            if gray == 0:
-                return cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
-            else:
-                return cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
+            return cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
 
-    def find_img(self, img_template_path, part=0, pos1=None, pos2=None, gray=0):
+    def find_img(self, img_template_path, part=0, pos1=None, pos2=None):
         """
         查找当前窗口中模板图片的位置
             :param img_template_path: 欲查找的图片路径
             :param part: 是否全屏查找，1为否，其他为是
             :param pos1: 欲查找范围的左上角坐标
             :param pos2: 欲查找范围的右下角坐标
-            :param gray: 是否彩色查找，0：查找彩色图片，1：查找黑白图片
             :return: (maxVal,maxLoc) maxVal为相关性，越接近1越好，maxLoc为得到的左上角坐标,右下角坐标为左上角坐标+模板图大小
         """
         # 获取截图
         if part == 1:
-            img_src = self.window_part_shot(pos1, pos2, None, gray)
+            img_src = self.window_part_shot(pos1, pos2, None)
         else:
-            img_src = self.window_full_shot(None, gray)
+            img_src = self.window_full_shot(None)
 
-        # show_img(img_src)
 
         # 读入文件
-        if gray == 0:
-            img_template = cv2.imread(img_template_path, cv2.IMREAD_COLOR)
-        else:
-            img_template = cv2.imread(img_template_path, cv2.IMREAD_GRAYSCALE)
+        img_template = cv2.imread(img_template_path, cv2.IMREAD_COLOR)
 
         try:
             res = cv2.matchTemplate(img_src, img_template, cv2.TM_CCOEFF_NORMED)
@@ -204,7 +192,6 @@ class GameControl:
         鼠标单击
         """
         win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
-        time.sleep(random.randint(20, 80) / 1000)
         win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
 
     def mouse_drag(self, pos1, pos2):
@@ -239,24 +226,20 @@ class GameControl:
             :param pos: (x,y) 鼠标单击的坐标
             :param pos_end=None: (x,y) 若pos_end不为空，则鼠标单击以pos为左上角坐标pos_end为右下角坐标的区域内的随机位置
         """
+        # todo 先激活一下窗口
+        self.activate_window()
         if pos_end == None:
             win32gui.SendMessage(
-                self.hwnd, win32con.WM_MOUSEMOVE, 0, win32api.MAKELONG(pos[0], pos[1]))
+                self.hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, win32api.MAKELONG(pos[0], pos[1]))
             win32gui.SendMessage(
-                self.hwnd, win32con.WM_LBUTTONDOWN, 0, win32api.MAKELONG(pos[0], pos[1]))
-            time.sleep(random.randint(20, 80) / 1000)
-            win32gui.SendMessage(
-                self.hwnd, win32con.WM_LBUTTONUP, 0, win32api.MAKELONG(pos[0], pos[1]))
+                self.hwnd, win32con.WM_LBUTTONUP, win32con.MK_LBUTTON, win32api.MAKELONG(pos[0], pos[1]))
         else:
             pos_rand = (random.randint(
                 pos[0], pos_end[0]), random.randint(pos[1], pos_end[1]))
-            win32gui.SendMessage(self.hwnd, win32con.WM_MOUSEMOVE,
-                                 0, win32api.MAKELONG(pos_rand[0], pos_rand[1]))
-            win32gui.SendMessage(self.hwnd, win32con.WM_LBUTTONDOWN, 0, win32api.MAKELONG(
+            win32gui.SendMessage(self.hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, win32api.MAKELONG(
                 pos_rand[0], pos_rand[1]))
-            time.sleep(random.randint(20, 80) / 1000)
             win32gui.SendMessage(self.hwnd, win32con.WM_LBUTTONUP,
-                                 0, win32api.MAKELONG(pos_rand[0], pos_rand[1]))
+                                 win32con.MK_LBUTTON, win32api.MAKELONG(pos_rand[0], pos_rand[1]))
 
     def mouse_drag_bg(self, pos1, pos2):
         """
@@ -279,7 +262,7 @@ class GameControl:
 
     def wait_game_img(self, img_path, max_time=100, quit=True):
         """
-        等待游戏图像
+        等待游戏图像出现
             :param img_path: 图片路径
             :param max_time=60: 超时时间
             :param quit=True: 超时后是否退出
@@ -287,37 +270,14 @@ class GameControl:
         """
         self.reject_bounty()
         start_time = time.time()
-        while time.time() - start_time <= max_time and self.run:
+        while time.time() - start_time <= max_time and self.run.is_running():
             maxVal, maxLoc = self.find_img(img_path)
             if maxVal > 0.97:
                 return maxLoc
             if max_time > 5:
-                time.sleep(1)
+                time.sleep(0.1)
             else:
                 time.sleep(0.1)
-        if quit:
-            # 超时则退出游戏
-            self.quit_game()
-        else:
-            return False
-
-    def wait_game_color(self, region, color, tolerance=0, max_time=60, quit=True):
-        """
-        等待游戏颜色
-            :param region: ((x1,y1),(x2,y2)) 欲搜索的区域
-            :param color: (r,g,b) 欲等待的颜色
-            :param tolerance=0: 容差值
-            :param max_time=30: 超时时间
-            :param quit=True: 超时后是否退出
-            :return: 成功返回True，失败返回False
-        """
-        self.reject_bounty()
-        start_time = time.time()
-        while time.time() - start_time <= max_time and self.run:
-            pos = self.find_color(region, color)
-            if pos != -1:
-                return True
-            time.sleep(1)
         if quit:
             # 超时则退出游戏
             self.quit_game()
@@ -329,7 +289,7 @@ class GameControl:
         退出游戏
         """
         self.take_screenshot()  # 保存一下现场
-        if not self.run:
+        if not self.run.is_running():
             return False
         if self.quit_game_enable:
             win32gui.SendMessage(self.hwnd, win32con.WM_DESTROY, 0, 0)  # 退出游戏
@@ -340,22 +300,22 @@ class GameControl:
         截图
         :return:
         """
-        img_src_path = ImgPath.IMG_FILE_PATH+'full.png'
+        img_src_path = ImgPath.GetImgFilePath() + 'full.png'
         self.window_full_shot(img_src_path)
 
     def reject_bounty(self):
-        '''
+        """
         拒绝悬赏
             :return: 拒绝成功返回True，其他情况返回False
-        '''
-        maxVal, maxLoc = self.find_img(ImgPath.XUAN_SHANG)
+        """
+        maxVal, maxLoc = self.find_img(ImgPath.GetImgFilePath() + ImgPath.XUAN_SHANG)
         if maxVal > 0.97:
-            self.mouse_click_bg((757, 460))
+            self.mouse_click_bg(CommonPosition.REJECT_BOUNTY_POS)
             return True
         return False
 
-    def find_game_img(self, img_path, part=0, pos1=None, pos2=None, gray=0):
-        '''
+    def find_game_img(self, img_path, part=0, pos1=None, pos2=None):
+        """
         查找图片
             :param img_path: 查找路径
             :param part=0: 是否全屏查找，0为否，其他为是
@@ -363,9 +323,9 @@ class GameControl:
             :param pos2=None: 欲查找范围的右下角坐标
             :param gray=0: 是否查找黑白图片，0：查找彩色图片，1：查找黑白图片
             :return: 查找成功返回位置坐标，否则返回False
-        '''
+        """
         self.reject_bounty()
-        maxVal, maxLoc = self.find_img(img_path, part, pos1, pos2, gray)
+        maxVal, maxLoc = self.find_img(img_path, part, pos1, pos2)
         if maxVal > 0.97:
             return maxLoc
         else:

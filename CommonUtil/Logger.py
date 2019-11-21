@@ -5,7 +5,7 @@ from PyQt5 import QtWidgets
 
 
 class QTextEditLogger(logging.Handler):
-    def __init__(self, parent,logger_ui):
+    def __init__(self, parent, logger_ui):
         super().__init__()
         self.widget = logger_ui
         self.widget.setReadOnly(True)
@@ -30,6 +30,7 @@ class Logger:
     console.setFormatter(formatter)
     logging.getLogger('').addHandler(console)
 
+
     @staticmethod
     def write_info(*args, **kwargs):
         logging.info(*args, **kwargs)
@@ -37,3 +38,7 @@ class Logger:
     @staticmethod
     def write_warning(*args, **kwargs):
         logging.warning(*args, **kwargs)
+
+
+# 自动初始化
+Logger()
