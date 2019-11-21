@@ -4,8 +4,10 @@ import sys
 
 from PyQt5.QtWidgets import QMainWindow, QApplication
 
+from CommonUtil.GlobalProperty import GlobalProperty
 from CommonUtil.Logger import QTextEditLogger
 from YuHunModule.State import State
+from YuHunModule.YuHunThreePerson import YuHunThreePerson
 from YuHunModule.YuHunTwoPerson import YuHunTwoPerson
 
 sys.path.append('..')
@@ -29,15 +31,14 @@ class AppStart(QMainWindow):
         self.ui.start_btn.clicked.connect(self.start)
         self.ui.end_btn.clicked.connect(self.stop)
         self.ui.quit_btn.clicked.connect(self.quit)
-        self.state=State()
+        self.state = State()
 
     def init_property(self):
         """
         初始化一些游戏参数
         :return:
         """
-        # todo
-        pass
+        GlobalProperty.need_mark_shi_shen = self.ui.need_mark_shi_shen.isChecked()
 
     def start(self):
         """
@@ -49,9 +50,31 @@ class AppStart(QMainWindow):
             logging.info('脚本已启动')
             return False
         logging.info('启动脚本')
+        # 判断当前选项
+        if self.ui.page.currentIndex() == 0:
+            # 御魂
+            if self.ui.yuhun_single.isChecked():
+                # todo
+                pass
+            elif self.ui.yuhun_driver.isChecked():
+                # todo
+                pass
+            elif self.ui.yuhun_passenger.isChecked():
+                # todo
+                pass
+
+            elif self.ui.yuhun_two.isChecked():
+                GlobalProperty.passenger_num = 1
+                self.fighter = YuHunTwoPerson()
+                self.fighter.start()
+
+            elif self.ui.yuhun_three.isChecked():
+                GlobalProperty.passenger_num = 2
+                self.fighter = YuHunThreePerson()
+                self.fighter.start()
+
         self.state.start()
-        fighter=YuHunTwoPerson()
-        fighter.start()
+
 
     def stop(self):
         """
@@ -65,6 +88,7 @@ class AppStart(QMainWindow):
             return False
         logging.info('停止脚本')
         self.state.stop()
+        self.fighter.stop()
 
     def quit(self):
         """
@@ -73,6 +97,7 @@ class AppStart(QMainWindow):
         """
         logging.info('退出脚本')
         sys.exit(0)
+
 
 if __name__ == "__main__":
     try:

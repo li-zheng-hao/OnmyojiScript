@@ -3,6 +3,7 @@ import time
 
 from CommonUtil import CommonPosition, ImgPath
 from CommonUtil.GlobalProperty import GlobalProperty
+from CommonUtil.RandomTimer import RandomTimer
 from YuHunModule.Fighter import Fighter
 from YuHunModule.State import State
 
@@ -10,6 +11,9 @@ from YuHunModule.State import State
 class YuHunPassenger(Fighter):
     def __init__(self, hwnd):
         Fighter.__init__(self, '乘客', hwnd)
+        self.random_timer_level_one = RandomTimer(level=1)
+        self.random_timer_level_two = RandomTimer(level=2)
+        self.random_timer_level_three = RandomTimer(level=3)
 
     def start(self):
         self.run.start()
@@ -18,18 +22,27 @@ class YuHunPassenger(Fighter):
             # 等待游戏结算
             self.wait_fight_end()
 
+            self.random_timer_level_three.sleep_random_time()
+
             # 点击第一次结算
             self.click_until('结算', ImgPath.GetImgFilePath() + ImgPath.JIN_BI,
                              *CommonPosition.JIE_SUAN_FIRST_POS, appear=True)
+
+            self.random_timer_level_one.sleep_random_time()
+            if self.run.is_running() is False:
+                return False
             # 点击第二次结算
             self.click_until('结算', ImgPath.GetImgFilePath() + ImgPath.JIN_BI,
                              *CommonPosition.JIE_SUAN_SECOND_POS, appear=False)
+            if self.run.is_running() is False:
+                return False
             # 等待下一轮
             logging.info('乘客等待下一轮')
             start_time = time.time()
             while time.time() - start_time <= 20 and self.run:
+
                 # 检测是否回到队伍中
-                if (self.game_control.wait_game_img(ImgPath.GetImgFilePath() + ImgPath.XIE_ZHAN_DUI_WU, 1, False)):
+                if self.game_control.wait_game_img(ImgPath.GetImgFilePath() + ImgPath.XIE_ZHAN_DUI_WU, 1, False):
                     logging.info('乘客进入队伍')
                     break
 

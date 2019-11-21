@@ -1,5 +1,5 @@
 import time
-from random import randrange
+import random
 
 
 class RandomTimer:
@@ -28,5 +28,9 @@ class RandomTimer:
         :return:
         """
         if self.level == 1:
-            time.sleep(randrange(RandomTimer.level_one_random[0], RandomTimer.level_one_random[1], step=0.2))
-        
+            time.sleep(random.uniform(RandomTimer.level_one_random[0], RandomTimer.level_one_random[1]))
+        elif self.level ==2:
+            time.sleep(random.uniform(RandomTimer.level_two_random[0], RandomTimer.level_two_random[1]))
+        elif self.level ==3:
+            time.sleep(random.uniform(RandomTimer.level_three_random[0], RandomTimer.level_three_random[1]))
+

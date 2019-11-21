@@ -4,6 +4,7 @@ import time
 from CommonUtil import ImgPath, CommonPosition
 from CommonUtil.GlobalProperty import GlobalProperty
 from CommonUtil.Logger import Logger
+from CommonUtil.RandomTimer import RandomTimer
 from ImageProcessModule.GameControl import GameControl
 from YuHunModule.Fighter import Fighter
 from YuHunModule.State import State
@@ -12,6 +13,9 @@ from YuHunModule.State import State
 class YuHunDriver(Fighter):
     def __init__(self, hwnd):
         Fighter.__init__(self, '司机', hwnd)
+        self.random_timer_level_one=RandomTimer(level=1)
+        self.random_timer_level_two=RandomTimer(level=2)
+        self.random_timer_level_three=RandomTimer(level=3)
 
     def start(self):
         self.run.start()
@@ -21,7 +25,7 @@ class YuHunDriver(Fighter):
                 # 等待两个乘客都上车 加号消失
                 self.game_control.wait_game_img(img_path=ImgPath.GetImgFilePath() + ImgPath.JIA_CHENG,
                                                 max_time=GlobalProperty.max_no_response_time)
-
+                self.random_timer_level_three.sleep_random_time()
                 self.click_until('开始战斗', ImgPath.GetImgFilePath() + ImgPath.DUI_YOU_JIA_HAO,
                                  *CommonPosition.KAI_SHI_ZHAN_DOU_POS, appear=False)
 
@@ -29,28 +33,40 @@ class YuHunDriver(Fighter):
                 # 等待点击挑战按钮亮起点击
                 pos = self.game_control.wait_game_img(img_path=ImgPath.GetImgFilePath() + ImgPath.KAI_SHI_ZHAN_DOU,
                                                       max_time=GlobalProperty.max_no_response_time)
+                self.random_timer_level_two.sleep_random_time()
                 self.game_control.mouse_click_bg(pos=pos, pos_end=(pos[0] + 10, pos[1] + 10))
                 logging.info('司机点击开始战斗按钮成功')
+            if self.run.is_running() is False:
+                return False
 
             # 需要手动标记式神
             if GlobalProperty.need_mark_shi_shen is True:
                 # 等待标记式神位置
-                # todo
                 self.game_control.wait_game_img(ImgPath.GetImgFilePath()+ImgPath.ZI_DONG)
-                logging.info('自动图片出现')
+                # logging.info('自动图片出现')
                 time.sleep(1)
                 self.game_control.mouse_click_bg(*CommonPosition.SHI_SHEN_MID_POS)
-
+                logging.info('成功标记式神')
+            if self.run.is_running() is False:
+                return False
             # 等待游戏结算
             self.wait_fight_end()
+
+            self.random_timer_level_one.sleep_random_time()
 
             # 点击第一次结算
             self.click_until('第一次结算', ImgPath.GetImgFilePath() + ImgPath.JIN_BI,
                              *CommonPosition.JIE_SUAN_FIRST_POS, appear=True)
-            logging.info('司机点击了第一次结算的位置{}'.format(CommonPosition.JIE_SUAN_FIRST_POS))
+            # logging.info('司机点击了第一次结算的位置{}'.format(CommonPosition.JIE_SUAN_FIRST_POS))
+            if self.run.is_running() is False:
+                return False
+            self.random_timer_level_one.sleep_random_time()
+
             # 点击第二次结算
             self.click_until('第二次结算', ImgPath.GetImgFilePath() + ImgPath.JIN_BI,
                              *CommonPosition.JIE_SUAN_SECOND_POS, appear=False)
+            if self.run.is_running() is False:
+                return False
             # 等待下一轮,顺便要检查自动邀请队友
             logging.info('司机等待下一轮')
             start_time = time.time()
@@ -63,7 +79,7 @@ class YuHunDriver(Fighter):
                 # 点击默认邀请
                 if self.game_control.find_game_img(ImgPath.GetImgFilePath() + ImgPath.ZI_DONG_YAO_QING):
                     self.game_control.mouse_click_bg(CommonPosition.ZI_DONG_YAO_QING_FIRST_POS)
-                    time.sleep(0.5)
+                    time.sleep(1)
                     self.game_control.mouse_click_bg(CommonPosition.ZI_DONG_YAO_QING_SECOND_POS)
                     logging.info('司机自动邀请自动邀请')
 
