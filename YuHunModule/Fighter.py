@@ -33,20 +33,23 @@ class Fighter:
         """
         start_time = time.time()
         while time.time() - start_time <= GlobalProperty.max_no_response_time and self.run.is_running():
+            logging.info('开始不断点击{}'.format(tag))
             result = self.game_control.find_game_img(img_path)
-            # 如果是判断消失的话,要取反
-            if appear is False:
+            if not appear:
                 result = not result
             if result:
-                logging.info('{}点击{}成功'.format(self.name,tag))
-                self.yys.mouse_click_bg(pos, None)
                 return True
+            else:
+                # 点击指定位置并等待下一轮
+                self.game_control.mouse_click_bg(pos, pos_end)
+                logging.warning('{}不断点击{},直到{}为{}'.format(self.name,pos, tag,appear))
+            time.sleep(0.5)
         logging.warning('{}点击{}失败'.format(self.name,tag))
 
         # 提醒玩家点击失败，并在5s后退出
-        self.yys.activate_window()
+        self.game_control.activate_window()
         time.sleep(5)
-        self.yys.quit_game()
+        self.game_control.quit_game()
         return False
 
     def wait_fight_end(self):

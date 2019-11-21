@@ -12,10 +12,11 @@ XIE_ZHAN_DUI_WU = 'XIE-ZHAN-DUI-WU.png'
 ZI_DONG_JIE_SHOU = 'ZI-DONG-JIE-SHOU.png'
 YU_HUN = 'YU-HUN.png'
 JIE_SHOU='JIE-SHOU.png'
+ZI_DONG='ZI-DONG.png'
 
 
 def GetImgFilePath():
-    root_dir = os.path.dirname(os.path.abspath('.')) + r'CommonUtil/'
+    root_dir = os.path.dirname(os.path.abspath('.')) + r'/Img/'
     return root_dir
 
 # print(GetImgFilePath())

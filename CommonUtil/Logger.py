@@ -2,6 +2,7 @@
 import logging
 
 from PyQt5 import QtWidgets
+from PyQt5.QtGui import QTextCursor
 
 
 class QTextEditLogger(logging.Handler):
@@ -10,9 +11,11 @@ class QTextEditLogger(logging.Handler):
         self.widget = logger_ui
         self.widget.setReadOnly(True)
 
+
     def emit(self, record):
         msg = self.format(record)
         self.widget.append(msg)
+        self.widget.moveCursor(QTextCursor.End)
 
 
 class Logger:
@@ -21,7 +24,7 @@ class Logger:
                         format='%(asctime)s  %(filename)s  [line:%(lineno)d]  %(levelname)s  %(message)s',
                         datefmt='%a, %d %b %Y %H:%M:%S',
                         filename='../log.log',
-                        filemode='w')
+                        filemode='a')
 
     # 定义一个StreamHandler，将DEBUG级别或更高的日志信息打印到标准错误，并将其添加到当前的日志处理对象#
     console = logging.StreamHandler()

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>817</width>
+    <width>603</width>
     <height>627</height>
    </rect>
   </property>
@@ -25,7 +25,7 @@
      <rect>
       <x>250</x>
       <y>10</y>
-      <width>551</width>
+      <width>341</width>
       <height>551</height>
      </rect>
     </property>
@@ -57,10 +57,10 @@
      <widget class="QGroupBox" name="groupBox_2">
       <property name="geometry">
        <rect>
-        <x>0</x>
+        <x>10</x>
         <y>10</y>
-        <width>541</width>
-        <height>61</height>
+        <width>311</width>
+        <height>151</height>
        </rect>
       </property>
       <property name="title">
@@ -82,8 +82,8 @@
       <widget class="QRadioButton" name="radioButton_2">
        <property name="geometry">
         <rect>
-         <x>140</x>
-         <y>30</y>
+         <x>20</x>
+         <y>60</y>
          <width>93</width>
          <height>16</height>
         </rect>
@@ -95,8 +95,8 @@
       <widget class="QRadioButton" name="radioButton_3">
        <property name="geometry">
         <rect>
-         <x>250</x>
-         <y>30</y>
+         <x>20</x>
+         <y>90</y>
          <width>93</width>
          <height>16</height>
         </rect>
@@ -108,8 +108,8 @@
       <widget class="QRadioButton" name="radioButton_4">
        <property name="geometry">
         <rect>
-         <x>360</x>
-         <y>30</y>
+         <x>20</x>
+         <y>120</y>
          <width>93</width>
          <height>16</height>
         </rect>
@@ -122,10 +122,10 @@
      <widget class="QGroupBox" name="groupBox_3">
       <property name="geometry">
        <rect>
-        <x>0</x>
-        <y>80</y>
-        <width>541</width>
-        <height>121</height>
+        <x>10</x>
+        <y>180</y>
+        <width>311</width>
+        <height>71</height>
        </rect>
       </property>
       <property name="title">
@@ -147,8 +147,8 @@
       <widget class="QLineEdit" name="lineEdit">
        <property name="geometry">
         <rect>
-         <x>50</x>
-         <y>60</y>
+         <x>240</x>
+         <y>30</y>
          <width>60</width>
          <height>20</height>
         </rect>
@@ -157,8 +157,8 @@
       <widget class="QLabel" name="label_2">
        <property name="geometry">
         <rect>
-         <x>20</x>
-         <y>60</y>
+         <x>130</x>
+         <y>30</y>
          <width>31</width>
          <height>21</height>
         </rect>
@@ -170,8 +170,8 @@
       <widget class="QLineEdit" name="lineEdit_2">
        <property name="geometry">
         <rect>
-         <x>50</x>
-         <y>90</y>
+         <x>150</x>
+         <y>30</y>
          <width>60</width>
          <height>20</height>
         </rect>
@@ -180,14 +180,55 @@
       <widget class="QLabel" name="label_3">
        <property name="geometry">
         <rect>
-         <x>20</x>
-         <y>90</y>
-         <width>31</width>
+         <x>220</x>
+         <y>30</y>
+         <width>21</width>
          <height>21</height>
         </rect>
        </property>
        <property name="text">
         <string>Y:</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_4">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>260</y>
+        <width>311</width>
+        <height>271</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>注意事项</string>
+      </property>
+      <widget class="QTextEdit" name="textEdit">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>291</width>
+         <height>241</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border: none;</string>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="html">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'SimSun'; font-size:7.2pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;1.1111111&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;2.2222222&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;3.3333333&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;4.4444444&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;5.5555555&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;6.6666666&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </widget>
@@ -260,10 +301,10 @@
      </property>
     </widget>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="start_btn">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>250</x>
       <y>570</y>
       <width>101</width>
       <height>31</height>
@@ -273,7 +314,7 @@
      <string>开始</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="end_btn">
     <property name="geometry">
      <rect>
       <x>370</x>
@@ -286,10 +327,10 @@
      <string>停止</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_3">
+   <widget class="QPushButton" name="quit_btn">
     <property name="geometry">
      <rect>
-      <x>700</x>
+      <x>490</x>
       <y>570</y>
       <width>101</width>
       <height>31</height>

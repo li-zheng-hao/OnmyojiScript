@@ -1,9 +1,12 @@
 import logging
 import threading
 
+import cv2
+
 from CommonUtil import ImgPath
 from ImageProcessModule.GameControl import GameControl
 from ImageProcessModule.GameWindow import GameWindow
+from YuHunModule.State import State
 from YuHunModule.YuHunDriver import YuHunDriver
 from YuHunModule.YuHunPassenger import YuHunPassenger
 
@@ -27,8 +30,13 @@ class YuHunTwoPerson():
         find_driver=False
         # 初始化司机和打手
         for hwnd in self.hwndlist:
-            yys = GameControl(hwnd)
 
+            yys = GameControl(hwnd,State())
+            logging.info('开始寻找打手')
+            img=cv2.imread(ImgPath.GetImgFilePath()+ImgPath.KAI_SHI_ZHAN_DOU)
+            if img is None:
+
+                logging.error('路径有问题：{}'.format(ImgPath.GetImgFilePath()+ImgPath.KAI_SHI_ZHAN_DOU))
             if yys.find_game_img(img_path=ImgPath.GetImgFilePath()+ImgPath.KAI_SHI_ZHAN_DOU):
                 self.driver = YuHunDriver(hwnd=hwnd)
                 find_driver=True
@@ -45,8 +53,8 @@ class YuHunTwoPerson():
         task2 = threading.Thread(target=self.passenger.start)
         task1.start()
         task2.start()
-        task1.join()
-        task2.join()
+        # task1.join()
+        # task2.join()
 
     def stop(self):
         """

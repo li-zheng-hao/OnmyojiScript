@@ -10,5 +10,5 @@ class GlobalProperty:
     mark_position=(500,388)
 
     # 当前乘客人数 不包括司机
-    passenger_num=2
+    passenger_num=1
 

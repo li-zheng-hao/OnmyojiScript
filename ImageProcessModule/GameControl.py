@@ -1,4 +1,5 @@
 import ctypes
+import logging
 import sys
 import time
 import random
@@ -226,8 +227,6 @@ class GameControl:
             :param pos: (x,y) 鼠标单击的坐标
             :param pos_end=None: (x,y) 若pos_end不为空，则鼠标单击以pos为左上角坐标pos_end为右下角坐标的区域内的随机位置
         """
-        # todo 先激活一下窗口
-        self.activate_window()
         if pos_end == None:
             win32gui.SendMessage(
                 self.hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, win32api.MAKELONG(pos[0], pos[1]))

@@ -36,17 +36,21 @@ class YuHunDriver(Fighter):
             if GlobalProperty.need_mark_shi_shen is True:
                 # 等待标记式神位置
                 # todo
-                pass
+                self.game_control.wait_game_img(ImgPath.GetImgFilePath()+ImgPath.ZI_DONG)
+                logging.info('自动图片出现')
+                time.sleep(1)
+                self.game_control.mouse_click_bg(*CommonPosition.SHI_SHEN_MID_POS)
 
             # 等待游戏结算
             self.wait_fight_end()
 
             # 点击第一次结算
-            self.click_until('结算', ImgPath.GetImgFilePath() + ImgPath.JIN_BI,
-                             CommonPosition.JIE_SUAN_FIRST_POS, appear=True)
+            self.click_until('第一次结算', ImgPath.GetImgFilePath() + ImgPath.JIN_BI,
+                             *CommonPosition.JIE_SUAN_FIRST_POS, appear=True)
+            logging.info('司机点击了第一次结算的位置{}'.format(CommonPosition.JIE_SUAN_FIRST_POS))
             # 点击第二次结算
-            self.click_until('结算', ImgPath.GetImgFilePath() + ImgPath.JIN_BI,
-                             CommonPosition.JIE_SUAN_SECOND_POS, appear=False)
+            self.click_until('第二次结算', ImgPath.GetImgFilePath() + ImgPath.JIN_BI,
+                             *CommonPosition.JIE_SUAN_SECOND_POS, appear=False)
             # 等待下一轮,顺便要检查自动邀请队友
             logging.info('司机等待下一轮')
             start_time = time.time()
@@ -59,7 +63,7 @@ class YuHunDriver(Fighter):
                 # 点击默认邀请
                 if self.game_control.find_game_img(ImgPath.GetImgFilePath() + ImgPath.ZI_DONG_YAO_QING):
                     self.game_control.mouse_click_bg(CommonPosition.ZI_DONG_YAO_QING_FIRST_POS)
-                    time.sleep(0.2)
+                    time.sleep(0.5)
                     self.game_control.mouse_click_bg(CommonPosition.ZI_DONG_YAO_QING_SECOND_POS)
                     logging.info('司机自动邀请自动邀请')
 

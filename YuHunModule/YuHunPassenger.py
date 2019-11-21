@@ -20,10 +20,10 @@ class YuHunPassenger(Fighter):
 
             # 点击第一次结算
             self.click_until('结算', ImgPath.GetImgFilePath() + ImgPath.JIN_BI,
-                             CommonPosition.JIE_SUAN_FIRST_POS, appear=True)
+                             *CommonPosition.JIE_SUAN_FIRST_POS, appear=True)
             # 点击第二次结算
             self.click_until('结算', ImgPath.GetImgFilePath() + ImgPath.JIN_BI,
-                             CommonPosition.JIE_SUAN_SECOND_POS, appear=False)
+                             *CommonPosition.JIE_SUAN_SECOND_POS, appear=False)
             # 等待下一轮
             logging.info('乘客等待下一轮')
             start_time = time.time()
@@ -34,19 +34,19 @@ class YuHunPassenger(Fighter):
                     break
 
                 # 检测是否有御魂邀请
-                yuhun_loc = self.yys.wait_game_img(
+                yuhun_loc = self.game_control.wait_game_img(
                     ImgPath.GetImgFilePath() + ImgPath.YU_HUN, 0.1, False)
-                logging.info('wait_game_img返回的坐标为:{}'.format(yuhun_loc))
+                # logging.info('wait_game_img返回的坐标为:{}'.format(yuhun_loc))
                 if yuhun_loc:
                     # 点击自动接受邀请
-                    if self.yys.find_game_img(ImgPath.GetImgFilePath() + ImgPath.ZI_DONG_JIE_SHOU):
-                        self.yys.mouse_click_bg((210, yuhun_loc[1]))
-                        self.log.writeinfo('乘客自动接受邀请')
+                    if self.game_control.find_game_img(ImgPath.GetImgFilePath() + ImgPath.ZI_DONG_JIE_SHOU):
+                        self.game_control.mouse_click_bg((210, yuhun_loc[1]))
+                        logging.info('乘客自动接受邀请')
 
                     # 点击普通接受邀请
-                    elif self.yys.find_game_img(ImgPath.GetImgFilePath() + ImgPath.JIE_SHOU):
-                        self.yys.mouse_click_bg((125, yuhun_loc[1]))
-                        self.log.writeinfo('乘客接受邀请')
+                    elif self.game_control.find_game_img(ImgPath.GetImgFilePath() + ImgPath.JIE_SHOU):
+                        self.game_control.mouse_click_bg((125, yuhun_loc[1]))
+                        logging.info('乘客接受邀请')
 
     def stop(self):
         """
