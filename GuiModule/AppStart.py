@@ -39,6 +39,10 @@ class AppStart(QMainWindow):
         :return:
         """
         GlobalProperty.need_mark_shi_shen = self.ui.need_mark_shi_shen.isChecked()
+        if self.ui.system_resize_resolution.currentIndex() == 0:
+            GlobalProperty.window_resize_resolution = 1.25
+        else:
+            GlobalProperty.window_resize_resolution = 1
 
     def start(self):
         """
@@ -74,7 +78,6 @@ class AppStart(QMainWindow):
                 self.fighter.start()
 
         self.state.start()
-
 
     def stop(self):
         """
