@@ -36,24 +36,27 @@ class YuHunThreePerson():
                 self.hwnd_list.remove(hwnd)
         if find_driver is False:
             logging.error('未找到司机，停止脚本')
+            self.init_state=False
             return None
-
         self.passenger1 = YuHunPassenger(hwnd=self.hwnd_list[0])
         logging.info('发现乘客,乘客1窗体句柄为{}'.format(self.hwnd_list[0]))
         self.passenger2 = YuHunPassenger(hwnd=self.hwnd_list[1])
         logging.info('发现乘客,乘客2窗体句柄为{}'.format(self.hwnd_list[1]))
+        self.init_state = True
 
     def start(self):
         try:
+            if self.init_state is False:
+                return False
             task1 = threading.Thread(target=self.driver.start)
             task2 = threading.Thread(target=self.passenger1.start)
             task3 = threading.Thread(target=self.passenger2.start)
             task1.start()
             task2.start()
             task3.start()
-            task1.join()
-            task2.join()
-            task3.join()
+            # task1.join()
+            # task2.join()
+            # task3.join()
             return True
         except AttributeError as e:
             logging.error('启动失败')

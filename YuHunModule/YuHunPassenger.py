@@ -1,7 +1,8 @@
 import logging
 import time
 
-from CommonUtil import CommonPosition, ImgPath
+from CommonUtil import ImgPath
+from CommonUtil.CommonPosition import CommonPos
 from CommonUtil.GlobalProperty import GlobalProperty
 from CommonUtil.RandomTimer import RandomTimer
 from YuHunModule.Fighter import Fighter
@@ -26,14 +27,14 @@ class YuHunPassenger(Fighter):
 
             # 点击第一次结算
             self.click_until('结算', ImgPath.GetImgFilePath() + ImgPath.JIN_BI,
-                             *CommonPosition.JIE_SUAN_FIRST_POS, appear=True)
+                             *CommonPos.JIE_SUAN_FIRST_POS, appear=True)
 
             self.random_timer_level_one.sleep_random_time()
             if self.run.is_running() is False:
                 return False
             # 点击第二次结算
             self.click_until('结算', ImgPath.GetImgFilePath() + ImgPath.JIN_BI,
-                             *CommonPosition.JIE_SUAN_SECOND_POS, appear=False)
+                             *CommonPos.JIE_SUAN_SECOND_POS, appear=False)
             if self.run.is_running() is False:
                 return False
             # 等待下一轮

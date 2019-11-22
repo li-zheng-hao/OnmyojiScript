@@ -121,7 +121,7 @@ class Ui_MainWindow(object):
         self.textEdit = QtWidgets.QTextEdit(self.groupBox_4)
         self.textEdit.setGeometry(QtCore.QRect(10, 20, 291, 241))
         font = QtGui.QFont()
-        font.setFamily("微软雅黑")
+        font.setFamily("黑体")
         self.textEdit.setFont(font)
         self.textEdit.setStyleSheet("border: none;")
         self.textEdit.setReadOnly(True)
@@ -133,11 +133,18 @@ class Ui_MainWindow(object):
         self.tab = QtWidgets.QWidget()
         self.tab.setObjectName("tab")
         self.page.addTab(self.tab, "")
-        self.tab_3 = QtWidgets.QWidget()
-        self.tab_3.setObjectName("tab_3")
-        self.page.addTab(self.tab_3, "")
         self.tab_4 = QtWidgets.QWidget()
         self.tab_4.setObjectName("tab_4")
+        self.textEdit_2 = QtWidgets.QTextEdit(self.tab_4)
+        self.textEdit_2.setGeometry(QtCore.QRect(5, 1, 321, 541))
+        font = QtGui.QFont()
+        font.setFamily("黑体")
+        self.textEdit_2.setFont(font)
+        self.textEdit_2.setAutoFillBackground(False)
+        self.textEdit_2.setStyleSheet("border: none;")
+        self.textEdit_2.setLineWidth(0)
+        self.textEdit_2.setReadOnly(True)
+        self.textEdit_2.setObjectName("textEdit_2")
         self.page.addTab(self.tab_4, "")
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(20, 40, 201, 61))
@@ -157,6 +164,10 @@ class Ui_MainWindow(object):
         self.groupBox.setObjectName("groupBox")
         self.textBrowser = QtWidgets.QTextBrowser(self.groupBox)
         self.textBrowser.setGeometry(QtCore.QRect(5, 21, 231, 451))
+        font = QtGui.QFont()
+        font.setFamily("黑体")
+        font.setPointSize(8)
+        self.textBrowser.setFont(font)
         self.textBrowser.setStyleSheet("border=none;")
         self.textBrowser.setObjectName("textBrowser")
         self.layoutWidget3 = QtWidgets.QWidget(self.centralwidget)
@@ -214,7 +225,7 @@ class Ui_MainWindow(object):
         self.textEdit.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'微软雅黑\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-family:\'黑体\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'SimSun\'; font-size:10pt;\">1.1111111</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'SimSun\'; font-size:10pt;\">2.2222222</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'SimSun\'; font-size:10pt;\">3.3333333</span></p>\n"
@@ -224,7 +235,16 @@ class Ui_MainWindow(object):
         self.page.setTabText(self.page.indexOf(self.explore), _translate("MainWindow", "御魂副本"))
         self.page.setTabText(self.page.indexOf(self.tab_2), _translate("MainWindow", "探索"))
         self.page.setTabText(self.page.indexOf(self.tab), _translate("MainWindow", "百鬼夜行"))
-        self.page.setTabText(self.page.indexOf(self.tab_3), _translate("MainWindow", "说明"))
+        self.textEdit_2.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'黑体\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'SimSun\'; font-size:10pt;\">1.1111111</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'SimSun\'; font-size:10pt;\">2.2222222</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'SimSun\'; font-size:10pt;\">3.3333333</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'SimSun\'; font-size:10pt;\">4.4444444</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'SimSun\'; font-size:10pt;\">5.5555555</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'SimSun\'; font-size:10pt;\">6.6666666</span></p></body></html>"))
         self.page.setTabText(self.page.indexOf(self.tab_4), _translate("MainWindow", "关于"))
         self.label.setText(_translate("MainWindow", "阴阳师辅助脚本"))
         self.groupBox.setTitle(_translate("MainWindow", "日志"))

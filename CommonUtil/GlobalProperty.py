@@ -5,6 +5,9 @@ class GlobalProperty:
     # 是否标记式神
     need_mark_shi_shen = True
 
+    # 御魂标记式神的位置 从左往右
+    mark_shi_shen_index=3
+
     # 标记位置
     mark_position = (500, 388)
 
@@ -12,4 +15,4 @@ class GlobalProperty:
     passenger_num = 1
 
     # 系统缩放比例 125%或者100%
-    window_resize_resolution = 1
+    window_resize_resolution = 1.25
