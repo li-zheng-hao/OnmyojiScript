@@ -29,7 +29,7 @@ class YuHunThreePerson():
         for hwnd in self.hwnd_list:
             yys = GameControl(hwnd,State())
 
-            if yys.find_game_img(img_path=ImgPath.GetImgFilePath() + ImgPath.KAI_SHI_ZHAN_DOU):
+            if yys.find_game_img(ImgPath.get_img_file_path() + ImgPath.KAI_SHI_ZHAN_DOU, False):
                 self.driver = YuHunDriver(hwnd=hwnd)
                 find_driver = True
                 logging.info('发现司机,司机的窗体句柄为{}'.format(hwnd))
@@ -59,6 +59,7 @@ class YuHunThreePerson():
             # task3.join()
             return True
         except AttributeError as e:
+
             logging.error('启动失败')
 
     def stop(self):

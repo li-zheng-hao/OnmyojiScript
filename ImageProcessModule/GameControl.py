@@ -12,7 +12,8 @@ import win32ui
 from PIL import Image
 
 from CommonUtil import ImgPath, CommonPosition
-from YuHunModule.State  import State
+from CommonUtil.CommonPosition import CommonPos
+from YuHunModule.State import State
 
 
 class GameControl:
@@ -34,10 +35,11 @@ class GameControl:
             :return: file_name为空则返回RGB数据
         """
         try:
-            l, t, r, b = win32gui.GetWindowRect(self.hwnd)
+            l, t, r, b = win32gui.GetClientRect(self.hwnd)
+
             # 39和16为Window与Client高和宽的差值
-            h = b - t - 39
-            w = r - l - 16
+            h = b - t - 0
+            w = r - l - 0
             hwindc = win32gui.GetWindowDC(self.hwnd)
             srcdc = win32ui.CreateDCFromHandle(hwindc)
             memdc = srcdc.CreateCompatibleDC()
@@ -63,8 +65,58 @@ class GameControl:
                 # cv2.imshow("image", cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY))
                 # cv2.waitKey(0)
                 return cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
-        except:
+        except Exception as e:
+            # logging.critical('无法获取窗体截图，请检查游戏窗体是否被最小化'.format(e))
+            # logging.exception(sys.exc_info())
             pass
+
+    def find_color(self, region, color, tolerance=0):
+        """
+        寻找颜色
+            :param region: ((x1,y1),(x2,y2)) 欲搜索区域的左上角坐标和右下角坐标
+            :param color: (r,g,b) 欲搜索的颜色
+            :param tolerance=0: 容差值
+            :return: 成功返回客户区坐标，失败返回-1
+        """
+        img = Image.fromarray(self.window_part_shot(
+            region[0], region[1]), 'RGB')
+        width, height = img.size
+        r1, g1, b1 = color[:3]
+        for x in range(width):
+            for y in range(height):
+                try:
+                    pixel = img.getpixel((x, y))
+                    r2, g2, b2 = pixel[:3]
+                    if abs(r1-r2) <= tolerance and abs(g1-g2) <= tolerance and abs(b1-b2) <= tolerance:
+                        return x+region[0][0], y+region[0][1]
+                except:
+                    return -1
+        return -1
+
+    def wait_game_color(self, region, color, tolerance=0, max_time=60, quit=False):
+        """
+        等待游戏颜色
+            :param region: ((x1,y1),(x2,y2)) 欲搜索的区域
+            :param color: (r,g,b) 欲等待的颜色
+            :param tolerance=0: 容差值
+            :param max_time=30: 超时时间
+            :param quit=True: 超时后是否退出
+            :return: 成功返回True，失败返回False
+        """
+        try:
+            start_time = time.time()
+            while time.time()-start_time <= max_time and self.run.is_running():
+                pos = self.find_color(region, color)
+                if pos != -1:
+                    return True
+                time.sleep(1)
+            if quit:
+                # 超时则退出游戏
+                self.quit_game()
+            else:
+                return False
+        except Exception as e:
+            logging.critical('wait_game_color:{}'.format(e.with_traceback()))
 
     def window_part_shot(self, pos1, pos2, file_name=None):
         """
@@ -104,21 +156,20 @@ class GameControl:
             # cv2.waitKey(0)
             return cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
 
-    def find_img(self, img_template_path, part=0, pos1=None, pos2=None):
+    def find_img(self, img_template_path, is_part_search=True, pos1=None, pos2=None):
         """
         查找当前窗口中模板图片的位置
             :param img_template_path: 欲查找的图片路径
-            :param part: 是否全屏查找，1为否，其他为是
+            :param part: 是否局部查找,True为是,False为不是
             :param pos1: 欲查找范围的左上角坐标
             :param pos2: 欲查找范围的右下角坐标
             :return: (maxVal,maxLoc) maxVal为相关性，越接近1越好，maxLoc为得到的左上角坐标,右下角坐标为左上角坐标+模板图大小
         """
         # 获取截图
-        if part == 1:
-            img_src = self.window_part_shot(pos1, pos2, None)
+        if is_part_search is True:
+            img_src = self.window_part_shot(pos1, pos2)
         else:
             img_src = self.window_full_shot(None)
-
 
         # 读入文件
         img_template = cv2.imread(img_template_path, cv2.IMREAD_COLOR)
@@ -128,6 +179,8 @@ class GameControl:
             minVal, maxVal, minLoc, maxLoc = cv2.minMaxLoc(res)
             return maxVal, maxLoc
         except Exception as e:
+            logging.info('GameControl:180 ----find_img出现错误{}'.format(e))
+            logging.critical(e)
             return 0, 0
 
     def find_multi_img(self, img_template_path, part=0, pos1=None, pos2=None, gray=0):
@@ -259,7 +312,7 @@ class GameControl:
         win32gui.SendMessage(self.hwnd, win32con.WM_LBUTTONUP,
                              0, win32api.MAKELONG(pos2[0], pos2[1]))
 
-    def wait_game_img(self, img_path, max_time=100, quit=True):
+    def wait_game_img(self, img_path, max_time=100, quit=False):
         """
         等待游戏图像出现
             :param img_path: 图片路径
@@ -270,13 +323,13 @@ class GameControl:
         self.reject_bounty()
         start_time = time.time()
         while time.time() - start_time <= max_time and self.run.is_running():
-            maxVal, maxLoc = self.find_img(img_path)
-            if maxVal > 0.97:
+            maxVal, maxLoc = self.find_img(img_path, False)
+            if maxVal > 0.85:
                 return maxLoc
             if max_time > 5:
-                time.sleep(0.1)
+                time.sleep(0.3)
             else:
-                time.sleep(0.1)
+                time.sleep(0.3)
         if quit:
             # 超时则退出游戏
             self.quit_game()
@@ -299,7 +352,8 @@ class GameControl:
         截图
         :return:
         """
-        img_src_path = ImgPath.GetImgFilePath() + 'full.png'
+        test=random.randint(1,10000)
+        img_src_path = ImgPath.get_img_file_path() + str(test)+'full.png'
         self.window_full_shot(img_src_path)
 
     def reject_bounty(self):
@@ -307,27 +361,30 @@ class GameControl:
         拒绝悬赏
             :return: 拒绝成功返回True，其他情况返回False
         """
-        maxVal, maxLoc = self.find_img(ImgPath.GetImgFilePath() + ImgPath.XUAN_SHANG)
-        if maxVal > 0.97:
-            self.mouse_click_bg(CommonPosition.REJECT_BOUNTY_POS)
+        maxVal, maxLoc = self.find_img(ImgPath.get_img_file_path() + ImgPath.XUAN_SHANG, False)
+        if maxVal > 0.90:
+            self.mouse_click_bg(CommonPos.REJECT_BOUNTY_POS)
             return True
         return False
 
-    def find_game_img(self, img_path, part=0, pos1=None, pos2=None):
+    def find_game_img(self, img_path, is_part_search=True, pos1=None, pos2=None,th=0.85):
         """
         查找图片
             :param img_path: 查找路径
-            :param part=0: 是否全屏查找，0为否，其他为是
+            :param is_part_search: 是否全屏查找，True为是,False为不是
             :param pos1=None: 欲查找范围的左上角坐标
             :param pos2=None: 欲查找范围的右下角坐标
             :param gray=0: 是否查找黑白图片，0：查找彩色图片，1：查找黑白图片
             :return: 查找成功返回位置坐标，否则返回False
         """
+        # self.take_screenshot()
         self.reject_bounty()
-        maxVal, maxLoc = self.find_img(img_path, part, pos1, pos2)
-        if maxVal > 0.97:
+        maxVal, maxLoc = self.find_img(img_path, is_part_search, pos1, pos2)
+        logging.info('maxVal----{}'.format(maxVal))
+        if maxVal > th:
             return maxLoc
         else:
+            logging.info('find_img未找到,阈值是否有问题')
             return False
 
 

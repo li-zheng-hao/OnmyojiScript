@@ -12,8 +12,8 @@ class RandomTimer:
     """
     # 范围[x,x+y] 单位秒
     level_one_random = (0.5, 0.5)
-    level_two_random = (1, 0.5)
-    level_three_random = (1.5, 1)
+    level_two_random = (1.5, 0.5)
+    level_three_random = (2.5, 1)
 
     def __init__(self, level: int = 1):
         """

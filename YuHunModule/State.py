@@ -1,3 +1,4 @@
+import logging
 from enum import Enum
 
 STATE_RUNNING = 'RUNNING'

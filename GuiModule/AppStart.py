@@ -1,12 +1,14 @@
 import ctypes
 import logging
 import sys
+import threading
 
 from PyQt5.QtWidgets import QMainWindow, QApplication
 
 from CommonUtil.CommonPosition import CommonPos
 from CommonUtil.GlobalProperty import GlobalProperty
 from CommonUtil.Logger import QTextEditLogger
+from ExploreModule.ExploreTwoPerson import ExploreTwoPerson
 from ImageProcessModule.GameWindow import GameWindow
 from YuHunModule.State import State
 from YuHunModule.YuHunDriver import YuHunDriver
@@ -31,7 +33,6 @@ class AppStart(QMainWindow):
         logging.getLogger().addHandler(logger)
         logging.getLogger().setLevel(logging.DEBUG)
         logging.info('程序启动')
-        self.init_property()
         # 信号槽连接
         self.ui.start_btn.clicked.connect(self.start)
         self.ui.end_btn.clicked.connect(self.stop)
@@ -45,6 +46,7 @@ class AppStart(QMainWindow):
         """
         GlobalProperty.need_mark_shi_shen = self.ui.need_mark_shi_shen.isChecked()
         GlobalProperty.mark_shi_shen_index = self.ui.mark_shi_shen_pos_index.value()
+        GlobalProperty.n_ka_slider_value=self.ui.n_ka_slider.value()
         if self.ui.system_resize_resolution.currentIndex() == 0:
             logging.info('当前系统缩放比例为{}'.format(self.ui.system_resize_resolution.itemText(0)))
             GlobalProperty.window_resize_resolution = 1.25
@@ -61,6 +63,7 @@ class AppStart(QMainWindow):
             logging.info('脚本已启动')
             return False
         logging.info('启动脚本')
+        self.init_property()
         CommonPos.InitCommonPosWithSystemResolution()
         # 判断当前选项
         if self.ui.page.currentIndex() == 0:
@@ -75,14 +78,18 @@ class AppStart(QMainWindow):
                     logging.error('窗体数量异常')
                     return False
                 self.fighter = YuHunDriver(hwndlist[0])
-                is_running = self.fighter.start()
+                is_running = True
+                task1 = threading.Thread(target=self.fighter.start)
+                task1.start()
             elif self.ui.yuhun_passenger.isChecked():
                 hwndlist = GameWindow.get_game_hwnd()
                 if len(hwndlist) != 1:
                     logging.error('窗体数量异常')
                     return False
                 self.fighter = YuHunPassenger(hwndlist[0])
-                is_running = self.fighter.start()
+                is_running = True
+                task1 = threading.Thread(target=self.fighter.start)
+                task1.start()
             elif self.ui.yuhun_two.isChecked():
                 GlobalProperty.passenger_num = 1
                 self.fighter = YuHunTwoPerson()
@@ -92,6 +99,11 @@ class AppStart(QMainWindow):
                 GlobalProperty.passenger_num = 2
                 self.fighter = YuHunThreePerson()
                 is_running = self.fighter.start()
+        elif self.ui.page.currentIndex() == 1:
+            # 探索界面
+            self.fighter = ExploreTwoPerson()
+            self.fighter.start()
+            is_running=True
 
         if is_running:
             self.state.start()
