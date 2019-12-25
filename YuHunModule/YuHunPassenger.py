@@ -51,12 +51,12 @@ class YuHunPassenger(Fighter):
                 if yuhun_loc:
                     # 点击自动接受邀请
                     if self.game_control.find_game_img(ImgPath.get_img_file_path() + ImgPath.ZI_DONG_JIE_SHOU, False):
-                        self.game_control.mouse_click_bg(*CommonPos.YU_HUN_ZI_DONG_JIE_SHOU_YAO_QING)
+                        self.game_control.mouse_click_bg(CommonPos.YU_HUN_ZI_DONG_JIE_SHOU_YAO_QING)
                         logging.info('乘客自动接受邀请')
 
                     # 点击普通接受邀请
                     elif self.game_control.find_game_img(ImgPath.get_img_file_path() + ImgPath.JIE_SHOU, False):
-                        self.game_control.mouse_click_bg(*CommonPos.YU_HUN_JIE_SHOU_YAO_QING)
+                        self.game_control.mouse_click_bg(CommonPos.YU_HUN_JIE_SHOU_YAO_QING)
                         logging.info('乘客接受邀请')
 
     def stop(self):

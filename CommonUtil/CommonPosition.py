@@ -39,9 +39,9 @@ class CommonPos:
     SHI_SHEN_FIVE_POS_RECT = (941, 420), (945, 425)
 
     # 御魂自动邀请接受
-    YU_HUN_ZI_DONG_JIE_SHOU_YAO_QING = (200, 220), (210, 230)
+    YU_HUN_ZI_DONG_JIE_SHOU_YAO_QING = (200, 220)
     # 御魂邀请接受
-    YU_HUN_JIE_SHOU_YAO_QING = (120, 220), (130, 230)
+    YU_HUN_JIE_SHOU_YAO_QING = (120, 220)
 
     # ---------------探索部分--------------------------
     # 更换式神的时候的区域
