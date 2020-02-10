@@ -1,19 +1,26 @@
 import ctypes
+import glob
 import logging
+import os
 import sys
 import time
 import random
+
+
 import cv2
 import numpy as np
 import win32api
 import win32con
 import win32gui
 import win32ui
+import winsound
 from PIL import Image
 
 from CommonUtil import ImgPath, CommonPosition
 from CommonUtil.CommonPosition import CommonPos
 from YuHunModule.State import State
+
+
 
 
 class GameControl:
@@ -36,7 +43,6 @@ class GameControl:
         """
         try:
             l, t, r, b = win32gui.GetClientRect(self.hwnd)
-
             # 39和16为Window与Client高和宽的差值
             h = b - t - 0
             w = r - l - 0
@@ -66,8 +72,8 @@ class GameControl:
                 # cv2.waitKey(0)
                 return cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
         except Exception as e:
-            # logging.critical('无法获取窗体截图，请检查游戏窗体是否被最小化'.format(e))
-            # logging.exception(sys.exc_info())
+            # logging.critical('无法获取窗体截图，请检查游戏窗体是否被最小化,{}'.format(e))
+            logging.exception(sys.exc_info())
             pass
 
     def find_color(self, region, color, tolerance=0):
@@ -179,8 +185,8 @@ class GameControl:
             minVal, maxVal, minLoc, maxLoc = cv2.minMaxLoc(res)
             return maxVal, maxLoc
         except Exception as e:
-            logging.info('GameControl:180 ----find_img出现错误{}'.format(e))
-            logging.critical(e)
+            # logging.info('GameControl:180 ----find_img出现错误{}'.format(e))
+            # logging.critical(e)
             return 0, 0
 
     def find_multi_img(self, img_template_path, part=0, pos1=None, pos2=None, gray=0):
@@ -341,19 +347,33 @@ class GameControl:
         退出游戏
         """
         self.take_screenshot()  # 保存一下现场
+        winsound.Beep(2500, 3000)
         if not self.run.is_running():
             return False
-        if self.quit_game_enable:
-            win32gui.SendMessage(self.hwnd, win32con.WM_DESTROY, 0, 0)  # 退出游戏
-        sys.exit(0)
+        # if self.quit_game_enable:
+        #     win32gui.SendMessage(self.hwnd, win32con.WM_DESTROY, 0, 0)  # 退出游戏
+        # sys.exit(0)
 
-    def take_screenshot(self):
+    @staticmethod
+    def clean_all_screen_shot():
+        """
+        清除所有的截图图片
+        :return:
+        """
+        screen_shot_list = glob.glob(ImgPath.get_img_file_path() + 'screenshot_*.png')
+        if screen_shot_list is not None and len(screen_shot_list) is not 0:
+            logging.info('删除img下的所有截图文件,一共有{}张'.format(len(screen_shot_list)))
+            for path in screen_shot_list:
+                os.remove(path)
+
+    def take_screenshot(self,file_name='full'):
         """
         截图
         :return:
         """
-        test=random.randint(1,10000)
-        img_src_path = ImgPath.get_img_file_path() + str(test)+'full.png'
+        img_src_path = ImgPath.get_img_file_path() + 'screenshot_'+file_name+'.png'
+        print(img_src_path)
+        # img_src_path = 'test1.png'
         self.window_full_shot(img_src_path)
 
     def reject_bounty(self):
@@ -367,26 +387,43 @@ class GameControl:
             return True
         return False
 
-    def find_game_img(self, img_path, is_part_search=True, pos1=None, pos2=None,th=0.85):
+    def find_game_img(self, img_path, is_part_search=True, pos1=None, pos2=None,th=0.85,need_take_screen_shot=False):
         """
         查找图片
             :param img_path: 查找路径
-            :param is_part_search: 是否全屏查找，True为是,False为不是
+            :param is_part_search: 是否部分查找,False为不是
             :param pos1=None: 欲查找范围的左上角坐标
             :param pos2=None: 欲查找范围的右下角坐标
             :param gray=0: 是否查找黑白图片，0：查找彩色图片，1：查找黑白图片
             :return: 查找成功返回位置坐标，否则返回False
         """
-        # self.take_screenshot()
+        if need_take_screen_shot :
+            self.take_screenshot('tiaozhan')
         self.reject_bounty()
         maxVal, maxLoc = self.find_img(img_path, is_part_search, pos1, pos2)
         logging.info('maxVal----{}'.format(maxVal))
         if maxVal > th:
             return maxLoc
         else:
-            logging.info('find_img未找到,阈值是否有问题')
+            # logging.info('find_img未找到,阈值是否有问题')
             return False
 
+    def wait_game_img_disappear(self,img_path, max_time=100):
+        """
+        等待游戏图像消失
+        :return: 成功返回true
+        """
+        self.take_screenshot('Passenger_Plus_Logo')
+        self.reject_bounty()
+        start_time = time.time()
+        while time.time() - start_time <= max_time and self.run.is_running():
+            maxVal, maxLoc = self.find_img(img_path, False)
+            if maxVal > 0.85:
+                continue
+            else:
+                return True
+            time.sleep(0.5)
+        return False
 
 # 测试用
 def show_img(img):

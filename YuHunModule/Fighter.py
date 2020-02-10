@@ -66,7 +66,7 @@ class Fighter:
         """
         start_time = time.time()
         while time.time() - start_time <= GlobalProperty.max_no_response_time and self.run.is_running():
-            logging.info('{}开始不断点击{}'.format(self.name,tag))
+            # logging.info('{}开始不断点击{}'.format(self.name,tag))
             result = self.game_control.find_game_img(img_path,False)
             if not appear:
                 result = not result
@@ -75,7 +75,7 @@ class Fighter:
             else:
                 # 点击指定位置并等待下一轮
                 self.game_control.mouse_click_bg(pos, pos_end)
-                logging.warning('{}不断点击{},直到{}为{}'.format(self.name,pos, tag,appear))
+                # logging.warning('{}不断点击{},直到{}为{}'.format(self.name,pos, tag,appear))
             time.sleep(0.5)
         logging.warning('{}点击{}失败'.format(self.name,tag))
 
@@ -101,6 +101,6 @@ class Fighter:
         """
         logging.info('{}:检测是否进入战斗'.format(self.name))
         res=self.game_control.wait_game_img(img_path=ImgPath.get_img_file_path() + ImgPath.JIN_RU_ZHAN_DOU,
-                                        max_time=12)
+                                        max_time=1)
         logging.info('{}:检测到已经进入战斗,返回位置{}'.format(self.name,res))
         return res

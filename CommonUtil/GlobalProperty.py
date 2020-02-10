@@ -1,6 +1,6 @@
 class GlobalProperty:
     # 最长无反应时间
-    max_no_response_time = 180
+    max_no_response_time = 600
 
     # 是否标记式神
     need_mark_shi_shen = True

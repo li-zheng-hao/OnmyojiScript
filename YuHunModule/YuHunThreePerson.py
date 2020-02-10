@@ -29,13 +29,13 @@ class YuHunThreePerson():
         for hwnd in self.hwnd_list:
             yys = GameControl(hwnd,State())
 
-            if yys.find_game_img(ImgPath.get_img_file_path() + ImgPath.KAI_SHI_ZHAN_DOU, False):
+            if yys.find_game_img(ImgPath.get_img_file_path() + ImgPath.KAI_SHI_ZHAN_DOU, False,need_take_screen_shot=True):
                 self.driver = YuHunDriver(hwnd=hwnd)
                 find_driver = True
                 logging.info('发现司机,司机的窗体句柄为{}'.format(hwnd))
                 self.hwnd_list.remove(hwnd)
         if find_driver is False:
-            logging.error('未找到司机，停止脚本')
+            logging.error('未找到司机，停止脚本,请检查img目录下的screenshot_tiaozhan图像')
             self.init_state=False
             return None
         self.passenger1 = YuHunPassenger(hwnd=self.hwnd_list[0])

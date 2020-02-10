@@ -1,12 +1,21 @@
+
 import ctypes
 import logging
 import sys
 import threading
 
+
+sys.path.append('..')
+
 from PyQt5.QtWidgets import QMainWindow, QApplication
+from ExploreModule.ExplorePassenger import ExplorePassenger
+
+
+from ImageProcessModule.GameControl import GameControl
 
 from CommonUtil.CommonPosition import CommonPos
 from CommonUtil.GlobalProperty import GlobalProperty
+from CommonUtil.ImgPath import check_img_path_correct
 from CommonUtil.Logger import QTextEditLogger
 from ExploreModule.ExploreTwoPerson import ExploreTwoPerson
 from ImageProcessModule.GameWindow import GameWindow
@@ -16,7 +25,6 @@ from YuHunModule.YuHunPassenger import YuHunPassenger
 from YuHunModule.YuHunThreePerson import YuHunThreePerson
 from YuHunModule.YuHunTwoPerson import YuHunTwoPerson
 
-sys.path.append('..')
 
 from GuiModule.MainWindow import Ui_MainWindow
 from CommonUtil.IsAdmin import is_admin
@@ -33,6 +41,7 @@ class AppStart(QMainWindow):
         logging.getLogger().addHandler(logger)
         logging.getLogger().setLevel(logging.DEBUG)
         logging.info('程序启动')
+        logging.info('环境配置:游戏分辨率1136*640,系统缩放100%,脚本缩放设置为100%')
         # 信号槽连接
         self.ui.start_btn.clicked.connect(self.start)
         self.ui.end_btn.clicked.connect(self.stop)
@@ -54,6 +63,7 @@ class AppStart(QMainWindow):
             logging.info('当前系统缩放比例为{}'.format(self.ui.system_resize_resolution.itemText(1)))
             GlobalProperty.window_resize_resolution = 1
 
+
     def start(self):
         """
         开始运行脚本
@@ -70,7 +80,7 @@ class AppStart(QMainWindow):
             # 御魂
             if self.ui.yuhun_single.isChecked():
                 # todo
-                logging.info('暂不支持单刷')
+                logging.info('警告:暂不支持单刷')
                 pass
             elif self.ui.yuhun_driver.isChecked():
                 hwndlist = GameWindow.get_game_hwnd()
@@ -101,8 +111,18 @@ class AppStart(QMainWindow):
                 is_running = self.fighter.start()
         elif self.ui.page.currentIndex() == 1:
             # 探索界面
-            self.fighter = ExploreTwoPerson()
-            self.fighter.start()
+            # self.fighter = ExploreTwoPerson()
+            logging.info('探索-组队乘客模式启动')
+            hwndlist = GameWindow.get_game_hwnd()
+            # if len(hwndlist) != 1:
+            logging.error('窗体数量为{},{}'.format(len(hwndlist),hwndlist[0]))
+                # return False
+            self.fighter = ExplorePassenger(hwndlist[0])
+            task1 = threading.Thread(target=self.fighter.start)
+            task1.start()
+            # self.fighter2 = ExplorePassenger(hwndlist[1])
+            # task2 = threading.Thread(target=self.fighter2.start)
+            # task2.start()
             is_running=True
 
         if is_running:
@@ -131,11 +151,29 @@ class AppStart(QMainWindow):
         sys.exit(0)
 
 
+def my_excepthook(exc_type, exc_value, tb):
+    msg = ' Traceback (most recent call last):\n'
+    while tb:
+        filename = tb.tb_frame.f_code.co_filename
+        name = tb.tb_frame.f_code.co_name
+        lineno = tb.tb_lineno
+        msg += '   File "%.500s", line %d, in %.500s\n' % (filename, lineno, name)
+        tb = tb.tb_next
+
+    msg += ' %s: %s\n' %(exc_type.__name__, exc_value)
+
+    logging.critical(msg)
+
 if __name__ == "__main__":
     try:
         # 检测管理员权限
         if is_admin():
+            sys.excepthook = my_excepthook
             app = QApplication(sys.argv)
+            # 预处理操作
+            check_img_path_correct()
+            GameControl.clean_all_screen_shot()
+
             myWin = AppStart()
             myWin.show()
             sys.exit(app.exec_())

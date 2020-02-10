@@ -272,11 +272,12 @@ class Ui_MainWindow(object):
         self.system_resize_resolution.setObjectName("system_resize_resolution")
         self.system_resize_resolution.addItem("")
         self.system_resize_resolution.addItem("")
+        self.system_resize_resolution.setCurrentIndex(1)
         self.gridLayout_3.addWidget(self.system_resize_resolution, 0, 1, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.page.setCurrentIndex(1)
+        self.page.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -323,8 +324,8 @@ class Ui_MainWindow(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9pt;\">5.不要点锁定阵容，不然无法更换狗粮</span></p></body></html>"))
         self.groupBox_7.setTitle(_translate("MainWindow", "参数"))
         self.label_3.setText(_translate("MainWindow", "1级N卡的大概位置："))
-        self.page.setTabText(self.page.indexOf(self.tab_2), _translate("MainWindow", "探索"))
-        self.page.setTabText(self.page.indexOf(self.tab), _translate("MainWindow", "百鬼夜行"))
+        self.page.setTabText(self.page.indexOf(self.tab_2), _translate("MainWindow", "探索(未完成)"))
+        self.page.setTabText(self.page.indexOf(self.tab), _translate("MainWindow", "百鬼夜行(未完成)"))
         self.textEdit_2.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"

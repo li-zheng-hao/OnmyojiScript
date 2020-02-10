@@ -25,7 +25,7 @@ class CommonPos:
     ZI_DONG_YAO_QING_SECOND_POS = (674, 384)
 
     # 御魂开始战斗按钮位置
-    KAI_SHI_ZHAN_DOU_POS_RECT = (1085, 566),(1088, 570)
+    KAI_SHI_ZHAN_DOU_POS_RECT = (1077, 577),(1080, 580)
 
     # 御魂标记第一个式神位置
     SHI_SHEN_ONE_POS_RECT = (125, 360), (145, 380)
@@ -146,16 +146,16 @@ class CommonPos:
             CommonPos.SHI_SHEN_FIVE_POS_RECT[1][0] * GlobalProperty.window_resize_resolution), round(
             CommonPos.SHI_SHEN_FIVE_POS_RECT[1][1] * GlobalProperty.window_resize_resolution))
 
+        CommonPos.ZI_DONG_YAO_QING_SECOND_POS = (
+            round(CommonPos.ZI_DONG_YAO_QING_SECOND_POS[0] * GlobalProperty.window_resize_resolution),
+            round(CommonPos.ZI_DONG_YAO_QING_SECOND_POS[1] * GlobalProperty.window_resize_resolution))
         CommonPos.YU_HUN_ZI_DONG_JIE_SHOU_YAO_QING = (round(
-            CommonPos.YU_HUN_ZI_DONG_JIE_SHOU_YAO_QING[0][0] * GlobalProperty.window_resize_resolution), round(
-            CommonPos.YU_HUN_ZI_DONG_JIE_SHOU_YAO_QING[0][1] * GlobalProperty.window_resize_resolution)), (round(
-            CommonPos.YU_HUN_ZI_DONG_JIE_SHOU_YAO_QING[1][0] * GlobalProperty.window_resize_resolution), round(
-            CommonPos.YU_HUN_ZI_DONG_JIE_SHOU_YAO_QING[1][1] * GlobalProperty.window_resize_resolution))
+            CommonPos.YU_HUN_ZI_DONG_JIE_SHOU_YAO_QING[0] * GlobalProperty.window_resize_resolution), round(
+            CommonPos.YU_HUN_ZI_DONG_JIE_SHOU_YAO_QING[1] * GlobalProperty.window_resize_resolution))
+
         CommonPos.YU_HUN_JIE_SHOU_YAO_QING = (round(
-            CommonPos.YU_HUN_JIE_SHOU_YAO_QING[0][0] * GlobalProperty.window_resize_resolution), round(
-            CommonPos.YU_HUN_JIE_SHOU_YAO_QING[0][1] * GlobalProperty.window_resize_resolution)), (round(
-            CommonPos.YU_HUN_JIE_SHOU_YAO_QING[1][0] * GlobalProperty.window_resize_resolution), round(
-            CommonPos.YU_HUN_JIE_SHOU_YAO_QING[1][1] * GlobalProperty.window_resize_resolution))
+            CommonPos.YU_HUN_JIE_SHOU_YAO_QING[0] * GlobalProperty.window_resize_resolution), round(
+            CommonPos.YU_HUN_JIE_SHOU_YAO_QING[1] * GlobalProperty.window_resize_resolution))
 
 # CommonPos.InitCommonPosWithSystemResolution()
 # print(CommonPos.JIE_SUAN_FIRST_POS)

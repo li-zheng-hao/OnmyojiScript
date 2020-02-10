@@ -1,9 +1,11 @@
 # 存储所有图片的名称,函数调用时手动添加相对路径
+import logging
 import os
+from .Logger import Logger
 
 # ---------------公共部分--------------------------
 from CommonUtil.GlobalProperty import GlobalProperty
-
+import glob
 XUAN_SHANG = 'XUAN-SHANG.png'
 JIN_BI = 'JIN-BI.png'
 JIE_SHU = 'JIE-SHU.png'
@@ -50,8 +52,22 @@ EXPLORE_JIE_SHOU='TAN-SUO-JIE-SHOU.png'
 
 JIN_RU_ZHAN_DOU='JIN-RU-ZHAN-DOU.png'
 
+
 def get_img_file_path():
-    root_dir = os.path.dirname(os.path.abspath('.')) + r'/Img/'
+    root_dir = os.path.dirname(os.path.abspath('.')) + '\\Img\\'
     return root_dir
 
+def check_img_path_correct():
+    """
+    检查图片路径是否正确
+    :return:
+    """
+    logging.info('启动前检查图片路径,检查路径为{}'.format(get_img_file_path()+r'*.png'))
+    img_list=glob.glob(get_img_file_path()+'*.png')
+    if img_list is None or len(img_list) == 0:
+        logging.error('img文件夹路径错误,应与exe文件同路径')
+        return False
+    else:
+        logging.info('img文件夹下图片数量为{}'.format(len(img_list)))
+        return True
 # print(GetImgFilePath())
