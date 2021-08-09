@@ -30,7 +30,7 @@ PyScreeze==0.1.26
 pytest==5.3.0
 python-dotenv==0.10.3
 PyTweening==1.0.3
-pywin32==224
+pywin32==301
 pywin32-ctypes==0.2.0
 six==1.13.0
 wcwidth==0.1.7
