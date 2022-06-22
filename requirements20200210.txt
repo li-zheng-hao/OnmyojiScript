@@ -8,7 +8,7 @@ future==0.18.2
 importlib-metadata==0.23
 more-itertools==7.2.0
 MouseInfo==0.1.2
-numpy==1.17.1
+numpy==1.22.0
 olefile==0.46
 opencv-python==4.1.0.25
 packaging==19.2
